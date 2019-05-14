@@ -1,0 +1,6 @@
+# ===== Below is the content of the file at https://github.com/github/gitignore/blob/master/Global/VisualStudioCode.gitignore, by GitHub, licensed under the Creative Commons Zero v1.0 Universal license (https://github.com/github/gitignore/blob/master/LICENSE).
+.vscode/*
+# !.vscode/settings.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/extensions.json
