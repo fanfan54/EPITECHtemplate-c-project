@@ -1,0 +1,163 @@
+##
+## EPITECH PROJECT, 2019
+## .gitignore
+## File description:
+## .gitignore for C projects (without .a files, without single_binary,
+## with .gitignore)
+## Author: francois.lefevre@epitech.eu
+## Last revision: 02/05/2019
+## Licensed under the Creative Commons Zero v1.0 Universal license
+##
+
+# Ignore the gitignores because they have nothing to do with the project
+# .gitignore
+
+# Ignore temp files used during development
+*.bak
+*.old
+
+# Ignore gcovr (coverage) data
+*.gcda
+*.gcno
+
+# Ignore GIMP project files
+*.xcf
+
+# Ignore valgrind dumps
+vgcore*
+
+# Ignore macOS Finder temp files
+*.DS_Store
+__MACOSX/
+
+# Ignore Windows Explorer temp files
+Thumbs.db
+
+# Ignore the subject's PDF
+/subject-*
+
+# Ignore reference files (solution)
+/reference/
+
+# Ignore README and LICENSE from GitHub libs
+LICENSE
+README.md
+
+# Ignore binaries/executables
+/single_binary
+unit_tests
+
+# Ignore headers generated during compilation
+/include/my_hello_world.h
+/include/my_putstr.h
+
+# Ignore temp files from vim
+*.swp
+
+# ===== Below is the content of the file at https://github.com/github/gitignore/blob/master/Global/VisualStudioCode.gitignore, by GitHub, licensed under the Creative Commons Zero v1.0 Universal license (https://github.com/github/gitignore/blob/master/LICENSE).
+.vscode/*
+# !.vscode/settings.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/extensions.json
+
+# ===== Below is the content of the file at https://github.com/github/gitignore/blob/master/Global/Emacs.gitignore, by GitHub, licensed under the Creative Commons Zero v1.0 Universal license (https://github.com/github/gitignore/blob/master/LICENSE).
+# -*- mode: gitignore; -*-
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+# ===== Below is the content of the file at https://github.com/github/gitignore/blob/master/C.gitignore, by GitHub, licensed under the Creative Commons Zero v1.0 Universal license (https://github.com/github/gitignore/blob/master/LICENSE).
+
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+dkms.conf
