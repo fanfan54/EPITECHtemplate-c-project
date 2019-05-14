@@ -35,6 +35,9 @@ If applicable, add screenshots to help explain your problem.
 **Custom rules/features added**
 If applicable, explain the changes you added to the Makefile (or include the whole Makefile if you can).
 
+**Explain how the bug fix can be implemented**
+If you have any idea, explain how it could be fixed in the code (e.g. with which functions or data structures), or if you already found the cause of the bug in the code, tell where it is.
+
 **Additional context**
 Add any other context about the problem here.
 
