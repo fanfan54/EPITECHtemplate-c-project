@@ -5,7 +5,7 @@
 ## .gitignore for C projects (without .a files, without single_binary,
 ## with .gitignore)
 ## Author: francois.lefevre@epitech.eu
-## Last revision: 02/05/2019
+## Last revision: 20/05/2019
 ## Licensed under the Creative Commons Zero v1.0 Universal license
 ##
 
@@ -15,10 +15,6 @@
 # Ignore temp files used during development
 *.bak
 *.old
-
-# Ignore gcovr (coverage) data
-*.gcda
-*.gcno
 
 # Ignore GIMP project files
 *.xcf
@@ -53,6 +49,13 @@ unit_tests
 
 # Ignore temp files from vim
 *.swp
+
+# ===== Below is the content of the file at https://github.com/github/gitignore/blob/master/Gcov.gitignore, by GitHub, licensed under the Creative Commons Zero v1.0 Universal license (https://github.com/github/gitignore/blob/master/LICENSE).
+# gcc coverage testing tool files
+
+*.gcno
+*.gcda
+*.gcov
 
 # ===== Below is the content of the file at https://github.com/github/gitignore/blob/master/Global/VisualStudioCode.gitignore, by GitHub, licensed under the Creative Commons Zero v1.0 Universal license (https://github.com/github/gitignore/blob/master/LICENSE).
 .vscode/*
@@ -161,3 +164,90 @@ flycheck_*.el
 modules.order
 Module.symvers
 dkms.conf
+
+# ===== Below is the content of the file at https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore, by GitHub, licensed under the Creative Commons Zero v1.0 Universal license (https://github.com/github/gitignore/blob/master/LICENSE).
+
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# Generated files
+.idea/**/contentModel.xml
+
+# Sensitive or high-churn files
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# Gradle
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# Gradle and Maven with auto-import
+# When using Gradle or Maven with auto-import, you should exclude module files,
+# since they will be recreated, and may cause churn.  Uncomment if using
+# auto-import.
+# .idea/modules.xml
+# .idea/*.iml
+# .idea/modules
+# *.iml
+# *.ipr
+
+# CMake
+cmake-build-*/
+
+# Mongo Explorer plugin
+.idea/**/mongoSettings.xml
+
+# File-based project format
+*.iws
+
+# IntelliJ
+out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Cursive Clojure plugin
+.idea/replstate.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Editor-based Rest Client
+.idea/httpRequests
+
+# Android studio 3.1+ serialized cache file
+.idea/caches/build_file_checksums.ser
+
+# ===== Below is the content of the file at https://github.com/github/gitignore/blob/master/Global/Linux.gitignore, by GitHub, licensed under the Creative Commons Zero v1.0 Universal license (https://github.com/github/gitignore/blob/master/LICENSE).
+
+*~
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
