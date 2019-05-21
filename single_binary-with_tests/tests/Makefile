@@ -3,9 +3,9 @@
 ## Makefile
 ## File description:
 ## Makefile for single_binary's unit tests
-## (Makefile for tests)
+## (Makefile for Criterion unit tests)
 ## Dependencies:
-## - Makefile for the my_hello_world library (depends of the my_putstr library)
+## - Makefile for the my_hello_world library (depends on the my_putstr library)
 ## - Makefile for the my_putstr library
 ## Syntax notes:
 ## - Rules and variables are sorted in alphabetical order
@@ -13,85 +13,88 @@
 ## Last revision: 02/05/2019
 ##
 
-CFLAGS						+=	-Wall -Wextra -Werror -Wpedantic -pedantic-errors
+CFLAGS							+=	-Wall -Wextra -Werror -Wpedantic -pedantic-errors --coverage
 
-CPPFLAGS					+=	-I $(PATH_HEADERS)/
+CPPFLAGS						+=	-I $(PATH_HEADERS)/
 
-LDFLAGS						+=	-l criterion -L $(PATH_LIB_OUTPUT)/ $(addprefix -l, $(LIBS)) -o $(EXEC)
+LDFLAGS							+=	-l criterion -L $(RELATIVE_PATH_LIB_DIR)/ $(addprefix -l, $(LIBS)) -o $(EXEC)
 
-EXEC						=	unit_tests
+EXEC							=	unit_tests
 
-GCOV_FILES					=	$(SRC:.c=.gcda) $(SRC:.c=.gcno) $(SRC:.c=.c.gcov)
+LIBS							=	my_hello_world						\
+									my_putstr
 
-LIBS						=	my_hello_world						\
-								my_putstr
+OBJ								=	$(addprefix $(PATH_OBJ_DIR)/, $(SRC:.c=.o))
 
-OBJ							=	$(addprefix $(PATH_OBJ)/, $(SRC:.c=.o))
+SRC								=	src/globals.c						\
+									src/parse_main_args.c				\
+									src/single_binary.c
 
-SRC							=	src/globals.c						\
-								src/main.c							\
-								src/parse_main_args.c				\
-								src/single_binary.c
+PATH_GCOV_FILES					=	$(SRC:.c=.gcda) $(SRC:.c=.gcno) $(SRC:.c=.c.gcov)
 
-LIB_HELLO_WORLD_FILE		=	$(PATH_LIB_OUTPUT)/libmy_hello_world.a
+PATH_HEADERS					=	include
 
-PATH_LIB_HELLO_WORLD_SRC	=	$(PATH_LIB_OUTPUT)/my_hello_world
+PATH_LIB_ARCHIVES				=	$(addprefix $(PATH_LIB_DIR)/lib, $(addsuffix .a, $(LIBS)))
 
-LIB_PUTSTR_FILE				=	$(PATH_LIB_OUTPUT)/libmy_putstr.a
+PATH_LIB_DIR					=	../$(RELATIVE_PATH_LIB_DIR)
 
-PATH_LIB_PUTSTR_SRC			=	$(PATH_LIB_OUTPUT)/my_putstr
+PATH_OBJ_DIR					=	obj
 
-PATH_LIB_OUTPUT				=	libs
+PATH_OBJ_FILES					=	$(addprefix $(PATH_OBJ_DIR)/, $(SRC:.c=.o))
 
-PATH_HEADERS				=	include
+RELATIVE_PATH_LIB_DIR			=	libs
 
-PATH_OBJ					=	obj
-
-$(EXEC):					$(LIB_PUTSTR_FILE) $(LIB_HELLO_WORLD_FILE) $(OBJ)
+$(EXEC):						libs $(OBJ)
 	cd .. && $(CC) $(CPPFLAGS) $(CFLAGS) $(OBJ) $(LDFLAGS)
 
-.PHONY:						all
-all:						$(EXEC)
+.PHONY:							all
+all:							$(EXEC)
 
-.PHONY:						clean
-clean:						clean_lib_hello_world clean_lib_putstr
+.PHONY:							clean
+clean:							clean_libs
 	cd .. && $(RM) $(OBJ)
 
-.PHONY:						fclean
-fclean:						fclean_lib_hello_world fclean_lib_putstr
+.PHONY:							clean_libs
+clean_libs:						$(addprefix clean_, $(PATH_LIB_ARCHIVES))
+
+.PHONY:							debug
+debug:							debug_libs $(OBJ)
+	cd .. && $(CC) $(CPPFLAGS) $(CFLAGS) -g3 $(OBJ) $(LDFLAGS)
+
+.PHONY:							debug_libs
+debug_libs:						$(addprefix debug_, $(PATH_LIB_ARCHIVES))
+
+.PHONY:							fclean
+fclean:							fclean_libs
 	cd .. && $(RM) $(OBJ)
-	cd .. && $(RM) $(GCOV_FILES)
 	cd .. && $(RM) $(EXEC)
+	cd .. && $(RM) $(GCOV_FILES)
 
-.PHONY:						re
-re:							fclean all
+.PHONY:							fclean_libs
+fclean_libs:					$(addprefix fclean_, $(PATH_LIB_ARCHIVES))
 
-$(LIB_HELLO_WORLD_FILE):
-	$(MAKE) -C $(PATH_LIB_HELLO_WORLD_SRC)/
+.PHONY:							libs
+libs:							$(PATH_LIB_ARCHIVES)
 
-.PHONY:						clean_lib_hello_world
-clean_lib_hello_world:
-	$(MAKE) -C $(PATH_LIB_HELLO_WORLD_SRC)/ clean
+.PHONY:							re
+re:								fclean all
 
-.PHONY:						fclean_lib_hello_world
-fclean_lib_hello_world:
-	$(MAKE) -C $(PATH_LIB_HELLO_WORLD_SRC)/ fclean
-
-$(LIB_PUTSTR_FILE):
-	$(MAKE) -C $(PATH_LIB_PUTSTR_SRC)/
-
-.PHONY:						clean_lib_putstr
-clean_lib_putstr:
-	$(MAKE) -C $(PATH_LIB_PUTSTR_SRC)/ clean
-
-.PHONY:						fclean_lib_putstr
-fclean_lib_putstr:
-	$(MAKE) -C $(PATH_LIB_PUTSTR_SRC)/ fclean
-
-# We add "cd .." because gcov can't read the relative path to coverage files if source files were in a parent directory during compilation, so we have to cd to the root directory
-$(PATH_OBJ)/%.o:			%.c
-	cd .. && $(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
-
-.PHONY:						tests_run
-tests_run:					re
+.PHONY:							tests_run
+tests_run:						re
 	../$(EXEC)
+
+$(PATH_OBJ_DIR)/%.o:			%.c
+	mkdir -p $(PATH_OBJ_DIR)/$(<D)
+	cd .. && $(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(PATH_OBJ_DIR)/$(<:.c=.o)
+
+$(PATH_LIB_DIR)/lib%.a:			$(PATH_LIB_DIR)/%
+	$(MAKE) -C $<
+
+clean_$(PATH_LIB_DIR)/lib%.a:	$(PATH_LIB_DIR)/%
+	$(MAKE) -C $< clean
+
+debug_$(PATH_LIB_DIR)/lib%.a:	$(PATH_LIB_DIR)/%
+	$(MAKE) -C $< debug
+
+fclean_$(PATH_LIB_DIR)/lib%.a:	$(PATH_LIB_DIR)/%
+	$(MAKE) -C $< fclean

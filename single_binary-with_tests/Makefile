@@ -3,98 +3,96 @@
 ## Makefile
 ## File description:
 ## Makefile for single_binary
-## (Makefile for a single binary, with unit tests)
+## (Makefile for a single binary, with Criterion unit tests)
 ## Dependencies:
-## - Makefile for the my_hello_world library (depends of the my_putstr library)
+## - Makefile for the my_hello_world library (depends on the my_putstr library)
 ## - Makefile for the my_putstr library
-## - Makefile for single_binary's unit tests
+## - Makefile for single_binary's Criterion unit tests
 ## Syntax notes:
 ## - Rules and variables are sorted in alphabetical order
 ## - Path values mustn't end with a slash
 ## Last revision: 02/05/2019
 ##
 
-CFLAGS						+=	-Wall -Wextra -Werror -Wpedantic -pedantic-errors
+CFLAGS							+=	-Wall -Wextra -Werror -Wpedantic -pedantic-errors
 
-CPPFLAGS					+=	-I $(PATH_HEADERS)/
+CPPFLAGS						+=	-I $(PATH_HEADERS)/
 
-LDFLAGS						+=	-L $(PATH_LIB_OUTPUT)/ $(addprefix -l, $(LIBS)) -o $(EXEC)
+LDFLAGS							+=	-L $(PATH_LIB_DIR)/ $(addprefix -l, $(LIBS)) -o $(EXEC)
 
-EXEC						=	single_binary
+EXEC							=	single_binary
 
-LIBS						=	my_hello_world						\
-								my_putstr
+LIBS							=	
 
-OBJ							=	$(addprefix $(PATH_OBJ)/, $(SRC:.c=.o))
+OBJ								=	$(addprefix $(PATH_OBJ_DIR)/, $(SRC:.c=.o))
 
-SRC							=	src/globals.c						\
-								src/main.c							\
-								src/parse_main_args.c				\
-								src/single_binary.c
+SRC								=	src/globals.c						\
+									src/main.c							\
+									src/parse_main_args.c				\
+									src/single_binary.c
 
-LIB_HELLO_WORLD_FILE		=	$(PATH_LIB_OUTPUT)/libmy_hello_world.a
+PATH_HEADERS					=	include
 
-PATH_LIB_HELLO_WORLD_SRC	=	$(PATH_LIB_OUTPUT)/my_hello_world
+PATH_LIB_ARCHIVES				=	$(addprefix $(PATH_LIB_DIR)/lib, $(addsuffix .a, $(LIBS)))
 
-LIB_PUTSTR_FILE				=	$(PATH_LIB_OUTPUT)/libmy_putstr.a
+PATH_LIB_DIR					=	libs
 
-PATH_LIB_PUTSTR_SRC			=	$(PATH_LIB_OUTPUT)/my_putstr
+PATH_OBJ_DIR					=	obj
 
-PATH_LIB_OUTPUT				=	libs
+PATH_OBJ_FILES					=	$(addprefix $(PATH_OBJ_DIR)/, $(SRC:.c=.o))
 
-PATH_HEADERS				=	include
+PATH_TESTS						=	tests
 
-PATH_OBJ					=	obj
-
-PATH_TESTS					=	tests
-
-$(EXEC):					$(LIB_PUTSTR_FILE) $(LIB_HELLO_WORLD_FILE) $(OBJ)
+$(EXEC):						libs $(OBJ)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(OBJ) $(LDFLAGS)
 
-.PHONY:						all
-all:						$(EXEC)
+.PHONY:							all
+all:							$(EXEC)
 
-.PHONY:						clean
-clean:						clean_tests
+.PHONY:							clean
+clean:							clean_tests
 	$(RM) $(OBJ)
 
-.PHONY:						debug
-debug:						debug_lib_putstr debug_lib_hello_world
-	$(CC) $(CPPFLAGS) $(CFLAGS) -g3 $(SRC) $(LDFLAGS)
-
-.PHONY:						fclean
-fclean:						fclean_tests
-	$(RM) $(OBJ)
-	$(RM) $(EXEC)
-
-.PHONY:						re
-re:							fclean all
-
-$(LIB_HELLO_WORLD_FILE):
-	$(MAKE) -C $(PATH_LIB_HELLO_WORLD_SRC)/
-
-.PHONY:						debug_lib_hello_world
-debug_lib_hello_world:
-	$(MAKE) -C $(PATH_LIB_HELLO_WORLD_SRC)/ debug
-
-$(LIB_PUTSTR_FILE):
-	$(MAKE) -C $(PATH_LIB_PUTSTR_SRC)/
-
-.PHONY:						debug_lib_putstr
-debug_lib_putstr:
-	$(MAKE) -C $(PATH_LIB_PUTSTR_SRC)/ debug
-
-.PHONY:						tests_run
-tests_run:
-	$(MAKE) -C $(PATH_TESTS)/ tests_run
-
-.PHONY:						clean_tests
+.PHONY:							clean_tests
 clean_tests:
 	$(MAKE) -C $(PATH_TESTS)/ clean
 
-.PHONY:						fclean_tests
+.PHONY:							debug
+debug:							debug_libs $(addprefix debug_, $(OBJ))
+	$(CC) $(CPPFLAGS) $(CFLAGS) -g3 $(OBJ) $(LDFLAGS)
+
+.PHONY:							debug_libs
+debug_libs:						$(addprefix debug_, $(PATH_LIB_ARCHIVES))
+
+.PHONY:							fclean
+fclean:							fclean_tests
+	$(RM) $(OBJ)
+	$(RM) $(EXEC)
+
+.PHONY:							fclean_tests
 fclean_tests:
 	$(MAKE) -C $(PATH_TESTS)/ fclean
 
-$(PATH_OBJ)/%.o:				%.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+.PHONY:							libs
+libs:							$(PATH_LIB_ARCHIVES)
+
+.PHONY:							re
+re:								fclean all
+
+.PHONY:							tests_run
+tests_run:
+	$(MAKE) -C $(PATH_TESTS)/ tests_run
+
+$(PATH_OBJ_DIR)/%.o:			%.c
+	mkdir -p $(PATH_OBJ_DIR)/$(<D)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(PATH_OBJ_DIR)/$(<:.c=.o) $<
+
+debug_$(PATH_OBJ_DIR)/%.o:		%.c
+	mkdir -p $(PATH_OBJ_DIR)/$(<D)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -g3 -c -o $(PATH_OBJ_DIR)/$(<:.c=.o) $<
+
+$(PATH_LIB_DIR)/lib%.a:			$(PATH_LIB_DIR)/%
+	$(MAKE) -C $<
+
+debug_$(PATH_LIB_DIR)/lib%.a:	$(PATH_LIB_DIR)/%
+	$(MAKE) -C $< debug
